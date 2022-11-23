@@ -160,6 +160,14 @@
    &slema; is shipped with the <literal>targeted</literal> SELinux policy.
   </para>
  </section>
+
+ <section xml:id="sec-selinux-booleans">
+  <title>SELinux booleans</title>
+  <para>
+    The SELinux booleans supports a flexible policy management approach. Booleans enable you to, for example, disable a particular policy on one server, while keeping the same policy active on another one. In other words, a boolean can be understood as a switch of a policy rule. In the policy code, booleans are called a <emphasis>tunable</emphasis>. In the policy, the boolean is defined as shown below:
+  </para>
+ </section>
+
  <section xml:id="sec-security-context">
   <title>SELinux security context</title>
   <para>
