@@ -164,8 +164,71 @@
  <section xml:id="sec-selinux-booleans">
   <title>SELinux booleans</title>
   <para>
-    The SELinux booleans supports a flexible policy management approach. Booleans enable you to, for example, disable a particular policy on one server, while keeping the same policy active on another one. In other words, a boolean can be understood as a switch of a policy rule. In the policy code, booleans are called a <emphasis>tunable</emphasis>. In the policy, the boolean is defined as shown below:
+    The SELinux booleans supports a flexible policy management approach. Booleans enable you to, for example, disable a particular policy on one server, while keeping the same policy active on another one. In other words, a boolean can be understood as a switch of a policy rule. Intead of changing a particular policy, you can switch it off. In the policy code, booleans are called a <emphasis>tunable</emphasis>. With the booleans being included in the policy, they are available once a policy is loaded. 
   </para>
+  <para>
+    The changes to the booleans value may be persistent or just temporary till the session is ended.
+  </para>
+  
+    <para>
+    SELinux offers tools that enable you to list, view details or change the state of booleans. See the following sections for details.
+    </para>
+  
+<section xml:id="sec-list-booleans">
+  <title>Listing booleans</title>
+  <para>
+    You can use the <command>getsebool</command> or <command>semanage</command> command to list currently defined booleans. To list all currently defined booleans with their state, run the following command:
+  </para>
+  <screen>&prompt.root;getsebool -a
+
+abrt_anon_write --> off
+abrt_handle_event --> off
+abrt_upload_watch_anon_write --> on
+...
+  </screen>
+  <para>
+    To get more details about particular booleans, you can use the <command>semanage</command> command as follows:
+  </para>
+  <screen>&prompt.root;semanage boolean -l
+
+SELinux boolean               State   Default     Description
+
+abrt_anon_write               (off  ,  off)       Allow abrt to anon write
+abrt_handle_event             (off  ,  off)       Allow abrt to handle event
+abrt_upload_watch_anon_write  (on   ,   on)       Allow abrt to upload watch anon write
+  </screen>
+  <para>
+    To get the status of an individual boolean, you can use the following command:
+  </para>
+  <screen>&prompt.root;getsebool <replaceable>BOOLEAN_NAME</replaceable></screen>
+  <para>
+    Alternatively, you can just use the <command>grep</command> command on the <command>semanage boolean</command> output:
+  </para>
+  <screen>&prompt.root;semanage boolean -l | grep <replaceable>BOOLEAN_NAME</replaceable></screen>
+  </section>
+
+  <section xml:id="sec-switching-booleans">
+    <title>Toggling booleans</title>
+    <para>
+    The commands <command>setsebool</command> and <command>semanage</command> can be used to toggle booleans value. You can change the boolean status persistently or just temporarily untill the session is ended. To change a boolean value temporarily, run the following command:
+  </para>
+  <screen>&prompt.root;setsebool <replaceable>BOOLEAN_NAME</replaceable> <replaceable>BOOLEAN_VALUE</replaceable></screen>
+  <para>
+    where <replaceable>BOOLEAN_VALUE</replaceable> is either <literal>on</literal> or <literal>off</literal>.
+  </para>
+  <para>
+    To change a boolean value that persists, run one of the following two commands:
+  </para>
+  <screen>&prompt.root;setsebool -P <replaceable>BOOLEAN_NAME</replaceable> <replaceable>BOOLEAN_VALUE</replaceable></screen>
+  <para>
+    Alternatively, using the <command>semanage</command> command:
+  </para>
+  <screen>&prompt.root;semanage boolean -m --<replaceable>BOOLEAN_VALUE</replaceable>  <replaceable>BOOLEAN_NAME</replaceable></screen>
+  <para>
+    where <replaceable>BOOLEAN_VALUE</replaceable> is either <literal>on</literal> or <literal>off</literal>.
+  </para>
+  </section>
+
  </section>
 
  <section xml:id="sec-security-context">
