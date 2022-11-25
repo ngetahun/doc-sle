@@ -227,6 +227,10 @@ abrt_upload_watch_anon_write  (on   ,   on)       Allow abrt to upload watch ano
   <para>
     where <replaceable>BOOLEAN_VALUE</replaceable> is either <literal>on</literal> or <literal>off</literal>.
   </para>
+  <para>
+    A single boolean can enable or disable several policy rules. To view which policy rules are enabled or disabled by a particular boolean, run:
+  </para>
+  <screen>&prompt.root;sesearch -b <replaceable>BOOLEAN_NAME</replaceable> -AC </screen>
   </section>
 
  </section>
@@ -309,6 +313,34 @@ abrt_upload_watch_anon_write  (on   ,   on)       Allow abrt to upload watch ano
   <para>
    After successful installation, reboot the system.
   </para>
+
+  <section xml:id="sec-chcon-command">
+    <title>The <command>chcon</command> command</title>
+    <para>
+      The command name <command>chcon</command> stands for change context. The command can change the full security context of a file to the value provided on the CLI, or it can change parts of the context. Alternatively, you can provide a file that serves as a reference.
+    </para>
+    <para>
+      To change the full security context of a file, the command syntax looks as follows:
+    </para>
+    <screen>&prompt.root;chcon <replaceable>SECURITY_CONTEXT</replaceable> <replaceable>FILENAME</replaceable></screen>
+    <para>
+      where 
+    </para>
+<itemizedlist>
+  <listitem>
+    <para>
+      <replaceable>SECURITY_CONTEXT</replaceable> is in the format: <replaceable>SELinux_USER</replaceable>:<replaceable>ROLE</replaceable>:<replaceable>TYPE</replaceable>:<replaceable>LEVEL</replaceable>:<replaceable>CATEGORY</replaceable>
+    </para>
+  </listitem>
+  <para>
+    <replaceable>FILENAME</replaceable> is a path to the file, which context should be changed.
+  </para>
+  <listitem>
+  </listitem>
+
+</itemizedlist>    
+  </section>
+
   <variablelist>
    <title>SELinux commands</title>
    <varlistentry>
