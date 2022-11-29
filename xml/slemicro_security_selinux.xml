@@ -159,6 +159,82 @@
   <para>
    &slema; is shipped with the <literal>targeted</literal> SELinux policy.
   </para>
+
+  <section xml:id="sec-policy-containers">
+    <title>Creating policies for containers</title>
+    <para>
+      &productnameshort; is delivered with a policy that by default does not allow containers to access files outside of the container data. On the other hand, all network access is allowed. Typically, containers are created with bind mounts and should be able to access other directories like, for example, <filename>/home</filename> or <filename>/var</filename>. You may want a possibility to allow access to these directories or on contrary restrict just some ports to the container even if SELinux is used on your system. In this case, you need to create new policy rules that enable or disable the access. &productnameshort; provide the Udica tool for this purpose.
+    </para>
+    <para>
+      The following procedure describes how to create a custom policy for your containers:
+    </para>
+    <procedure>
+      <step>
+         <para>
+      Make sure that SELinux is in the enforcing mode.  
+    </para>
+    <screen>&prompt.root;setenforce 1</screen>
+    <para>
+      To verify the setting, run:
+    </para>
+    <screen>&prompt.root;getenforce
+
+enforcing
+    </screen>
+      </step>
+      <step>
+        <para>
+          Start a container using the following parameters:
+        </para>
+        <screen>&prompt.root;podman run -v /home:/home:rw -v /var/:/var/:rw -p 21:21 -it sle15 bash</screen>
+        <para>
+          The container runs with the default policy that does not allow access to the mount points, but does not restrict other ports.
+        </para>
+      </step>
+      <step>
+        <para>
+          In another terminal, obtain the container ID:
+        </para>
+        <screen>&prompt.root;podman ps
+
+CONTAINER ID  IMAGE                                                                              COMMAND     CREATED        STATUS            PORTS               NAMES
+e59f9d0f86f2  registry.opensuse.org/devel/bci/tumbleweed/containerfile/opensuse/bci/ruby:latest  /bin/bash   8 minutes ago  Up 8 seconds ago  0.0.0.0:21->21/tcp  zen_ramanujan
+        </screen>
+      </step>
+      <step>
+        <para>
+          Create a JSON file that Udica will use to create a custom policy for the container:
+        </para>
+        <screen>&prompt.root;podman inspect e59f9d0f86f2 > <replaceable>OUTPUT_JSON_FILE</replaceable></screen>
+        <para>
+          For example, substitute <replaceable>OUTPUT_JSON_FILE</replaceable> with <filename>container.json</filename>
+        </para>
+      </step>
+      <step>
+        <para>
+          Run Udica to generate a policy for the container:
+        </para>
+        <screen>&prompt.root;udica -j <replaceable>OUTPUT_JSON_FILE</replaceable>  <replaceable>CUSTOM_CONTAINER_POLICY</replaceable></screen>
+        <para>
+          For example:
+        </para>
+        <screen>&prompt.root;udica -j container.json custom_policy</screen>
+      </step>
+      <step>
+        <para>
+          According to the provided instructions, load the policy modules by running:
+        </para>
+        <screen>&prompt.root;semodule -i custom_policy.cil /usr/share/udica/templates/{base_container.cil,net_container.cil,home_container.cil}</screen>
+      </step>
+      <step>
+        <para>
+          Run a container with the new policy module by using the <option>--security-opt</option> as follows:
+        </para>
+        <screen>&prompt.root;podman run --security-opt label=type:custom_policy.process e59f9d0f86f2</screen>
+      </step>
+    </procedure>
+    
+  </section>
  </section>
 
  <section xml:id="sec-selinux-booleans">
@@ -228,9 +304,12 @@ abrt_upload_watch_anon_write  (on   ,   on)       Allow abrt to upload watch ano
     where <replaceable>BOOLEAN_VALUE</replaceable> is either <literal>on</literal> or <literal>off</literal>.
   </para>
   <para>
-    A single boolean can enable or disable several policy rules. To view which policy rules are enabled or disabled by a particular boolean, run:
+    A single boolean can enable or disable several policy rules. To view which policy rules are enabled or disabled by which booleans, use the <command>sedispol</command> tool that can parse the policy file:
   </para>
-  <screen>&prompt.root;sesearch -b <replaceable>BOOLEAN_NAME</replaceable> -AC </screen>
+  <screen>&prompt.root;sedispol /etc/selinux/targeted/policy/policy.32</screen>
+  <para>
+    As the policy rules are usually huge, we recommend setting an output file by selecting the <option>f</option> and specifying a file name. After specifying the file name, press <option>6</option>, then you can inspect the file.
+  </para>
   </section>
 
  </section>
@@ -324,21 +403,115 @@ abrt_upload_watch_anon_write  (on   ,   on)       Allow abrt to upload watch ano
     </para>
     <screen>&prompt.root;chcon <replaceable>SECURITY_CONTEXT</replaceable> <replaceable>FILENAME</replaceable></screen>
     <para>
-      where 
+      where: 
     </para>
 <itemizedlist>
   <listitem>
     <para>
-      <replaceable>SECURITY_CONTEXT</replaceable> is in the format: <replaceable>SELinux_USER</replaceable>:<replaceable>ROLE</replaceable>:<replaceable>TYPE</replaceable>:<replaceable>LEVEL</replaceable>:<replaceable>CATEGORY</replaceable>
+      <replaceable>SECURITY_CONTEXT</replaceable> is in the format: <replaceable>SELinux_USER</replaceable>:<replaceable>ROLE</replaceable>:<replaceable>TYPE</replaceable>:<replaceable>LEVEL</replaceable>:<replaceable>CATEGORY</replaceable>. For example, the context could be: <emphasis>system_u:object_r:httpd_config_t:s0</emphasis>.
     </para>
   </listitem>
+  <listitem>
   <para>
     <replaceable>FILENAME</replaceable> is a path to the file, which context should be changed.
   </para>
+  </listitem>
+</itemizedlist>    
+
+<para>
+  To set a security context according to a provided file that serves as a refence, run the <command>chcon</command> as follows:
+  </para>
+  <screen>&prompt.root;chcon --reference=<replaceable>REFERENCE_FILE</replaceable> <replaceable>FILENAME</replaceable></screen>
+  <para>
+    where:
+  </para>
+  <itemizedlist>
+    <listitem>
+    <para> 
+      <replaceable>REFERENCE_FILE</replaceable> is a path to a file that should be used as a reference.
+    </para>
+  </listitem>
   <listitem>
+  <para>
+    <replaceable>FILENAME</replaceable> is a path to the file, which context should be changed.
+  </para>
   </listitem>
 
-</itemizedlist>    
+  <para>
+    Alternatively, you can change only one part of the security contaxt. The general syntax of the <command>chron</command> command is as follows:
+  </para>
+  <screen>&prompt.root;chcon <replaceable>CONTEXT_OPTION</replaceable> <replaceable>CONTEXT_PART</replaceable> <replaceable>FILENAME</replaceable></screen>
+  <para>
+    where the options and arguments have the following meaning:
+  </para>
+  <itemizedlist>
+    <listitem>
+      <para>
+        depending on the context part, <replaceable>CONTEXT_OPTION</replaceable> can be any of the following:
+      </para>
+      <variablelist>
+        <varlistentry>
+        <term><option>-u</option> resp <option>--user</option></term>
+        <listitem>
+          <para>
+            denotes that a SELinux user context will be changed on the provided file:
+          </para>
+          <screen>&prompt.root;chcon -u system_u logind.conf</screen>
+        </listitem>
+      </varlistentry>
+      <varlistentry>
+        <term><option>-r</option> resp <option>--role</option></term>
+        <listitem>
+          <para>
+            only the role part will be changed in the context of the provided file:
+          </para>
+          <screen>&prompt.root;chcon -r object_r logind.conf</screen>
+        </listitem>
+      </varlistentry>
+      <varlistentry>
+        <term><option>-t</option> resp <option>--type</option></term>
+        <listitem>
+          <para>
+            only the type part will be changed in the context of the provided file:
+          </para>
+          <screen>&prompt.root;chcon -t etc_t logind.conf</screen>
+        </listitem>
+      </varlistentry>
+      <varlistentry>
+        <term><option>-l</option> resp <option>--range</option></term>
+        <listitem>
+          <para>
+            only the range part of the security context will be changed:
+          </para>
+          <screen>&prompt.root;chcon -l s0 logind.conf</screen>
+        </listitem>
+      </varlistentry>
+      
+      </variablelist>
+    </listitem>
+    <listitem>
+      <para>
+        <replaceable>CONTEXT_PART</replaceable> is the particular value of the security context to be set.
+      </para>
+    </listitem>
+    <listitem>
+      <para>
+        <replaceable>FILENAME</replaceable> is a path to the file which context will be changed.
+      </para>
+    </listitem>
+  </itemizedlist>
+  <note>
+    <title>Using <command>chcon</command> on symbolic links</title>
+    <para>
+      By default, when you change the security context on a symbolic link, the context of the link target is changed and the symmbolic link context is <emphasis role="bold">not</emphasis> changed. To force <command>chcon</command> to change the context of the symbolic link and not the link target, use the <option>--no-dereference</option> option as shown below:
+    </para>
+    <screen>&prompt.root;chcon --no-dereference -u system_u -t etc_t network.conf</screen>
+  </note>
+
+  <para>
+    You can change the context of all files in a directory by using the recursive option:
+  </para>
+  <screen>&prompt.root;chcon --recursive  system_u:object_r:httpd_config_t:s0 conf.d</screen>
   </section>
 
   <variablelist>
