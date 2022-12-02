@@ -380,6 +380,11 @@ abrt_upload_watch_anon_write  (on   ,   on)       Allow abrt to upload watch ano
     </listitem>
    </varlistentry>
   </variablelist>
+
+<section xml:id="sec-context-type">
+  <title>The type context field</title>
+</section>
+
  </section>
  <section xml:id="sec-managing-modes">
   <title>Tools for managing SELinux</title>
@@ -573,18 +578,80 @@ Permissive
     <itemizedlist>
       <listitem>
         <para>
-          manage booleans by using the <option>boolean</option> argument:
+          manage booleans by using the <option>boolean</option> argument. For details about booleans, refer to <xref linkend="sec-selinux-booleans"/>.
         </para>
       </listitem>
       <listitem>
         <para>
-          adjust the context of files by using the <option>fcontext</option> argument:
+          adjust the context of files by using the <option>fcontext</option> argument
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          manage user mappings using the <option>login</option>
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          manage SELinux users using the <option>user</option> option
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          manage SELinux policy modules using the <option>module</option>
         </para>
       </listitem>
     </itemizedlist>
+
+<section xml:id="sec-semanage-fcontext">
+  <title>The <command>semanage fcontext</command> command</title>
+</section>
   </section>
 
+  <section xml:id="sec-semanage-user">
+    <title>The <command>semanage user</command> command</title>
+    <para>
+      To list current SELinux users on your system, run:
+    </para>
+    <screen>&prompt.root;semanage user -l
 
+Labeling   MLS/       MLS/                          
+SELinux User    Prefix     MCS Level  MCS Range                      SELinux Roles
+
+guest_u         user       s0         s0                             guest_r
+root            user       s0         s0-s0:c0.c1023                 staff_r sysadm_r system_r unconfined_r
+staff_u         user       s0         s0-s0:c0.c1023                 staff_r sysadm_r system_r unconfined_r
+sysadm_u        user       s0         s0-s0:c0.c1023                 sysadm_r
+system_u        user       s0         s0-s0:c0.c1023                 system_r unconfined_r
+unconfined_u    user       s0         s0-s0:c0.c1023                 system_r unconfined_r
+user_u          user       s0         s0                             user_r
+xguest_u        user       s0         s0                             xguest_r
+    </screen>
+
+    <para>
+      The following command creates a user <literal>tux_u</literal> and assigns the <literal>sysadmin_r</literal> role to the user:
+    </para>
+    <screen>&prompt.root;semanage user -a -R "sysadmin_r" -r s0-s0:c0.c100,c201 tux_u</screen>
+
+    <para>
+      To modify an existing SELinux user, use the <option>-m</option> option as follows:
+    </para>
+    <screen>&prompt.root;semanage user -m -R "staff_r dbadm_r webadm_r" tux_u</screen>
+    <para>
+      The command above change the roles of the <literal>tux_u</literal> user to <literal>staff_r dbadm_r webadm_r</literal>.
+    </para>
+    <para>
+      You can use the <command>semanage user</command> command to remove a custom <!-- is it possible to remove default users? -->SELinux user. Make sure that all mapping towards this SELinux user is updated before you remove the user. 
+    </para>
+    <screen>&prompt.root;semanage user -d tux_u</screen>
+    <para>
+      After deleting the SELinux user, relabel all resources that might be related to the user.
+    </para>
+  </section>
+
+<section xml:id="sec-restorecon-command">
+  <title>The <command>restorecon</command> command</title>
+</section>
 
   
    <varlistentry>
