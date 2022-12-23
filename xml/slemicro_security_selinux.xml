@@ -661,6 +661,14 @@ Permissive
     <para>
       Any modification to a file context performed by the <command>semanage command</command> are stored in the <filename>/etc/selinux/targeted/contexts/files/file_contexts.local</filename>. File context definitions specified this way has a a higher priority than the definitions in policy modules.
     </para>
+    <para>
+      When specifying files which file context should be modified, you can provide a full path or you can use PERL regular expressions. For example, to add the <literal>httpd_sys_content_t</literal> type to all files in the <filename>/web</filename> directory, run the <command>semanage fcontext</command> command as follows:
+    </para>
+    <sceen>&prompt.root;semanage fcontext -a -t httpd_sys_content_t "/web(/.*)?"</sceen>
+    <para>
+      After adding the context, run the <command>restorecon</command> command:
+    </para>
+    <screen>&prompt.root;restorecon -R -v /web</screen>
    </section>
 </section>
   </section>
