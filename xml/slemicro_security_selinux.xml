@@ -676,6 +676,9 @@ Permissive
   <section xml:id="sec-semanage-user">
     <title>The <command>semanage user</command> command</title>
     <para>
+      The <command>semanage user</command> command enables you to manage SELinux users roles, MCS levels and ranges.
+    </para>
+    <para>
       To list current SELinux users on your system, run:
     </para>
     <screen>&prompt.root;semanage user -l
@@ -706,12 +709,33 @@ xguest_u        user       s0         s0                             xguest_r
       The command above change the roles of the <literal>tux_u</literal> user to <literal>staff_r dbadm_r webadm_r</literal>.
     </para>
     <para>
-      You can use the <command>semanage user</command> command to remove a custom <!-- is it possible to remove default users? -->SELinux user. Make sure that all mapping towards this SELinux user is updated before you remove the user. 
+      You can use the <command>semanage user</command> command to remove a custom SELinux user (SELinux users defined in policy cannot be deleted). Make sure that all mapping towards this SELinux user is updated before you remove the user. 
     </para>
     <screen>&prompt.root;semanage user -d tux_u</screen>
     <para>
       After deleting the SELinux user, relabel all resources that might be related to the user.
     </para>
+  </section>
+</section>
+
+<section xml:id="sec-semanage-login">
+  <title>The <command>semanage login</command> command</title>
+  <para>
+    The <command>semanage login</command> controls the mapping of users to SELinux users.
+  </para>
+  <para>
+To list all users in the system, run:
+  </para>
+  <screen>&prompt.root;semanage login --list
+
+Login Name           SELinux User         MLS/MCS Range        Service
+
+__default__          unconfined_u         s0-s0:c0.c1023       *
+root                 unconfined_u         s0-s0:c0.c1023       *
+  </screen>
+  <para>
+    After you create a new user in the system, you need to map the user to SELinux user.
+  </para>
   </section>
 
 <section xml:id="sec-restorecon-command">
