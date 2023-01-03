@@ -734,7 +734,11 @@ __default__          unconfined_u         s0-s0:c0.c1023       *
 root                 unconfined_u         s0-s0:c0.c1023       *
   </screen>
   <para>
-    After you create a new user in the system, you need to map the user to SELinux user.
+    After you create a new user in the system, the user receives a default mapping - <literal>unconfined_u </literal>. You can change this default mapping using the <command>semanage login</command> command as follows. For example, to set the <literal>user_u</literal> SELinux user as default:
+  </para>
+  <screen>&prompt.root;semanage login -m -s user_u -r s0 __default__</screen>
+  <para>
+    The MLS range must be adjusted in this case as the <literal>user_u</literal> SELinux user cannot access the same MLS range as <literal>unconfined_u</literal>.
   </para>
   </section>
 
