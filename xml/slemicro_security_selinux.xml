@@ -618,6 +618,20 @@ Permissive
         </para>
       </listitem>
     </itemizedlist>
+    <para>
+      All of the above mentioned commands take several common options, listed below:
+    </para>
+    <variablelist>
+      <varlistentry>
+        <term><option>-l</option> or <option>--list</option></term>
+        <listitem>
+          <para>
+            lists all objects.
+          </para>
+        </listitem>
+      </varlistentry>
+    </variablelist>
+
 
 <section xml:id="sec-semanage-fcontext">
   <title>The <command>semanage fcontext</command> command</title>
@@ -740,6 +754,18 @@ root                 unconfined_u         s0-s0:c0.c1023       *
   <para>
     The MLS range must be adjusted in this case as the <literal>user_u</literal> SELinux user cannot access the same MLS range as <literal>unconfined_u</literal>.
   </para>
+  <para>
+    Bear in mind that the new security context is not used until the user session is restarted. To use the new context, reboot the system. 
+  </para>
+  <para>
+    If you want to change assigned SELinux user to an account, run the following command. 
+  </para>
+  <screen>&prompt.root;semanage login -a -s <replaceable>SELINUX_USER</replaceable> <replaceable>LOGIN_NAME</replaceable></screen>
+  <para>
+    For example, you can map the <literal>staff_u</literal> SELinux user on the <literal>tux</literal> user:
+  </para>
+  <screen>&prompt.root;semanage login -a -s staff_u tux</screen>
+
   </section>
 
 <section xml:id="sec-restorecon-command">
