@@ -619,18 +619,75 @@ Permissive
       </listitem>
     </itemizedlist>
     <para>
-      All of the above mentioned commands take several common options, listed below:
+      The general command syntax looks as follows:
     </para>
-    <variablelist>
+    <screen>&prompt.root;semanage <replaceable>COMMAND</replaceable> <replaceable>OPTIONS</replaceable> [<replaceable>OBJECT_NAME</replaceable>]</screen>
+    <para>
+      where:
+    </para>
+    <itemizedlist>
+      <listitem>
+        <para>
+          <replaceable>COMMAND</replaceable> is one of the following: <command>login</command>, <command>user</command>, <command>fcontext</command>, <command>boolean</command>
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <replaceable>OPTIONS</replaceable> depends on the provided <replaceable>COMMAND</replaceable>. Common options are described in <xref linkend="list-common-options"/>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <replaceable>OBJECT_NAME</replaceable> depending on the provided <replaceable>COMMAND</replaceable> can be a login name, module name, filename or SELinux user.
+        </para>
+      </listitem>
+    </itemizedlist>
+    <variablelist xml:id="list-common-options">
+      <title>Common options</title>
       <varlistentry>
-        <term><option>-l</option> or <option>--list</option></term>
+        <term><option>-a</option>, <option>--add</option></term>
+        <listitem>
+          <para>
+            adds a provided object 
+          </para>
+        </listitem>
+      </varlistentry>
+      <varlistentry>
+        <term><option>-h</option>, <option>--help</option></term>
+        <listitem>
+          <para>
+            prints the command help
+          </para>
+        </listitem>
+      </varlistentry>
+      <varlistentry>
+        <term><option>-l</option>, <option>--list</option></term>
         <listitem>
           <para>
             lists all objects.
           </para>
         </listitem>
       </varlistentry>
-    </variablelist>
+      <varlistentry>
+        <term><option>-m</option>, <option>--modify</option></term>
+        <listitem>
+          <para>
+            modifies the provided object
+          </para>
+        </listitem>
+      </varlistentry>
+      <varlistentry>
+        <term><option>-n</option>, <option>--noheading</option></term>
+        <listitem>
+          <para>
+            modifies the output of the listing operation by omitting headings.
+          </para>
+        </listitem>
+      </varlistentry>
+      </variablelist>
+    <para>
+      Other options are specific to particular <command>semanage</command> commands and are described in corresponding sections.
+    </para>
 
 
 <section xml:id="sec-semanage-fcontext">
@@ -658,6 +715,61 @@ Permissive
   <para>
     Changes performed to the file context using the <command>semanage fcontext</command> command does not require modifications or recompilation of the policy. 
   </para>
+  <para>
+    On top of commmon options described in <xref linkend="list-common-options"/>, the <command>semanage fcontext</command> command takes the following options:
+  </para>
+  <variablelist>
+    <varlistentry>
+      <term><option>-f</option>, <option>--ftype</option></term>
+      <listitem>
+        <para>
+          specify a file type. Use one of the following values:
+        </para>
+        <itemizedlist>
+          <listitem>
+            <para>
+              <option>a</option> - all files, which is also the default value
+            </para>
+          </listitem>
+          <listitem>
+            <para>
+              <option>b</option> - a block device
+            </para>
+          </listitem>
+          <listitem>
+            <para>
+              <option>c</option> - a character device
+            </para>
+          </listitem>
+          <listitem>
+            <para>
+              <option>d</option> - a directory
+            </para>
+          </listitem>
+          <listitem>
+            <para>
+              <option>f</option> - regular files
+            </para>
+          </listitem>
+          <listitem>
+            <para>
+              <option>l</option> - a symbolic link
+            </para>
+          </listitem>
+          <listitem>
+            <para>
+              <option>p</option> - a named pipe
+            </para>
+          </listitem>
+          <listitem>
+            <para>
+              <option>s</option> - a socket.
+            </para>
+          </listitem>
+        </itemizedlist>
+      </listitem>
+    </varlistentry>
+  </variablelist>
 
   <secton xml:id="sec-query-context">
     <title>Querying file context definitions</title>
