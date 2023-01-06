@@ -821,9 +821,6 @@ Permissive
       The <command>semanage user</command> command enables you to manage SELinux users roles, MCS levels and ranges.
     </para>
     <para>
-      O
-    </para>
-    <para>
       To list current SELinux users on your system, run:
     </para>
     <screen>&prompt.root;semanage user -l
