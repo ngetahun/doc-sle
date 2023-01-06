@@ -55,6 +55,7 @@
    SELinux mode and rebuilds <literal>initrd</literal>.
   </para>
  </section>
+
  <section xml:id="sec-switching-modes">
   <title>SELinux modes</title>
   <para>
@@ -135,6 +136,7 @@
    </para>
   </note>
  </section>
+
  <section xml:id="sec-policy-overview">
   <title>SELinux policy overview</title>
   <para>
@@ -251,6 +253,8 @@ e59f9d0f86f2  registry.opensuse.org/devel/bci/tumbleweed/containerfile/opensuse/
    </procedure>
   </section>
  </section>
+
+ <!-- Don't audit rules are still missing -->
 
  <section xml:id="sec-selinux-booleans">
   <title>SELinux booleans</title>
@@ -395,11 +399,6 @@ abrt_upload_watch_anon_write  (on   ,   on)       Allow abrt to upload watch ano
     </listitem>
    </varlistentry>
   </variablelist>
-
-<section xml:id="sec-context-type">
-  <title>The type context field</title>
-</section>
-
  </section>
 
  <section xml:id="sec-managing-modes">
@@ -506,8 +505,7 @@ abrt_upload_watch_anon_write  (on   ,   on)       Allow abrt to upload watch ano
           </para>
           <screen>&prompt.root;chcon -l s0 logind.conf</screen>
         </listitem>
-      </varlistentry>
-      
+      </varlistentry>      
       </variablelist>
     </listitem>
     <listitem>
@@ -609,26 +607,27 @@ Permissive
       </listitem>
       <listitem>
         <para>
-          manage SELinux users using the <option>user</option> option
+          manage SELinux users using the <option>user</option> argument
         </para>
       </listitem>
       <listitem>
         <para>
-          manage SELinux policy modules using the <option>module</option>
+          manage SELinux policy modules using the <option>module</option> argument.
         </para>
       </listitem>
     </itemizedlist>
+    <!-- JH: Add all options! -->
     <para>
       The general command syntax looks as follows:
     </para>
-    <screen>&prompt.root;semanage <replaceable>COMMAND</replaceable> <replaceable>OPTIONS</replaceable> [<replaceable>OBJECT_NAME</replaceable>]</screen>
+    <screen>&prompt.root;semanage <replaceable>ARGUMENT</replaceable> <replaceable>OPTIONS</replaceable> [<replaceable>OBJECT_NAME</replaceable>]</screen>
     <para>
       where:
     </para>
     <itemizedlist>
       <listitem>
         <para>
-          <replaceable>COMMAND</replaceable> is one of the following: <command>login</command>, <command>user</command>, <command>fcontext</command>, <command>boolean</command>
+          <replaceable>ARGUMENT</replaceable> is one of the following: <command>login</command>, <command>user</command>, <command>fcontext</command>, <command>boolean</command>
         </para>
       </listitem>
       <listitem>
@@ -684,6 +683,14 @@ Permissive
           </para>
         </listitem>
       </varlistentry>
+      <varlistentry>
+        <term><option>-s</option>, <option>--seuser</option></term>
+        <listitem>
+          <para>
+            specifies the SELinux user.
+          </para>
+        </listitem>
+      </varlistentry>
       </variablelist>
     <para>
       Other options are specific to particular <command>semanage</command> commands and are described in corresponding sections.
@@ -719,6 +726,15 @@ Permissive
     On top of commmon options described in <xref linkend="list-common-options"/>, the <command>semanage fcontext</command> command takes the following options:
   </para>
   <variablelist>
+    <varlistentry>
+      <term><option>-e</option>, <option>--equal</option></term>
+      <listitem>
+        <para>
+          the option enables you to use the context of the provided path context to label files in a different directory (the provided target path), For example, you want to assign the same context as <filename>/home</filename> has to an alternative home directory <filename>/export/home</filename>. With using this option, you need to provide the source path and the target path:
+        </para>
+        <screen>&prompt.root;semanage fcontext -a -e /home /export/home</screen>
+      </listitem>
+    </varlistentry>
     <varlistentry>
       <term><option>-f</option>, <option>--ftype</option></term>
       <listitem>
@@ -771,7 +787,7 @@ Permissive
     </varlistentry>
   </variablelist>
 
-  <secton xml:id="sec-query-context">
+  <section xml:id="sec-query-context">
     <title>Querying file context definitions</title>
     <para>
       You can view all file context definitions by running the command:
@@ -780,7 +796,7 @@ Permissive
 <para>
   The command uses data stored in <filename>/etc/selinux/targeted/contexts/files/</filename> as a source of information.
 </para>
-  </secton>
+  </section>
 
   <section xml:id="sec-apply-context">
     <title>Adding contexts on files</title>
@@ -790,19 +806,22 @@ Permissive
     <para>
       When specifying files which file context should be modified, you can provide a full path or you can use PERL regular expressions. For example, to add the <literal>httpd_sys_content_t</literal> type to all files in the <filename>/web</filename> directory, run the <command>semanage fcontext</command> command as follows:
     </para>
-    <sceen>&prompt.root;semanage fcontext -a -t httpd_sys_content_t "/web(/.*)?"</sceen>
+    <screen>&prompt.root;semanage fcontext -a -t httpd_sys_content_t "/web(/.*)?"</screen>
     <para>
       After adding the context, run the <command>restorecon</command> command:
     </para>
     <screen>&prompt.root;restorecon -R -v /web</screen>
    </section>
 </section>
-  </section>
+ 
 
   <section xml:id="sec-semanage-user">
     <title>The <command>semanage user</command> command</title>
     <para>
       The <command>semanage user</command> command enables you to manage SELinux users roles, MCS levels and ranges.
+    </para>
+    <para>
+      O
     </para>
     <para>
       To list current SELinux users on your system, run:
@@ -842,7 +861,6 @@ xguest_u        user       s0         s0                             xguest_r
       After deleting the SELinux user, relabel all resources that might be related to the user.
     </para>
   </section>
-</section>
 
 <section xml:id="sec-semanage-login">
   <title>The <command>semanage login</command> command</title>
@@ -879,12 +897,17 @@ root                 unconfined_u         s0-s0:c0.c1023       *
   <screen>&prompt.root;semanage login -a -s staff_u tux</screen>
 
   </section>
+</section>
 
 <section xml:id="sec-restorecon-command">
   <title>The <command>restorecon</command> command</title>
+  <para>
+    TBD
+  </para>
+</section>
 </section>
 
-  
+ <!-- <variablelist>
    <varlistentry>
     <term><command>fixfiles</command></term>
     <listitem>
@@ -939,7 +962,7 @@ system_u:object_r:var_t:s0 var
       enables you to adjust context and configure certain elements of SELinux
       policy. The command provides several subcommands. For details, use:
      </para>
-<screen>&prompt.root;semanage --help</screen>
+
     </listitem>
    </varlistentry>
    
@@ -972,5 +995,5 @@ Max kernel policy version:    31
     example: <command>cp, ps</command>, and <command>id</command>.
    </para>
   </note>
- </section>
+ </section> -->
 </chapter>
