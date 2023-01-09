@@ -580,8 +580,63 @@ Permissive
     </para>
     <screen>&prompt.root;fixfiles <replaceable>OPTIONS</replaceable> <replaceable>ARGUMENT</replaceable></screen>
     <para>
-      TBD
+      where:
     </para>
+    <itemizedlist>
+      <listitem>
+        <para>
+          <replaceable>OPTIONS</replaceable> can be the following:
+        </para>
+        <variablelist>
+          <varlistentry>
+            <term><option></option></term>
+            <listitem>
+              <para>
+              </para>
+            </listitem>
+          </varlistentry>
+        </variablelist>
+      </listitem>
+      <listitem>
+        <para>
+          <replaceable>ARGUMENT</replaceable> can be one of the following:
+        </para>
+        <variablelist>
+          <varlistentry>
+            <term><command>check</command></term>
+            <listitem>
+              <para>
+                shows previous and current file context for incorrect label without performing any changes
+              </para>
+            </listitem>
+          </varlistentry>
+          <varlistentry>
+            <term><command>relabel</command></term>
+            <listitem>
+              <para>
+                relabels incorrect file contexts according to the currently loaded policy
+              </para>
+            </listitem>
+          </varlistentry>
+          <varlistentry>
+            <term><command>restore</command></term>
+            <listitem>
+              <para>
+                restores incorrect file contexts to the default values
+              </para>
+            </listitem>
+          </varlistentry>
+          <varlistentry>
+            <term><command>verify</command></term>
+            <listitem>
+              <para>
+                lists all files with incorrect file context labels without performing any changes.
+              </para>
+            </listitem>
+          </varlistentry>
+        </variablelist>
+      </listitem>
+    </itemizedlist>
   </section>
 
   <section xml:id="sec-semanage-command">
@@ -893,6 +948,61 @@ root                 unconfined_u         s0-s0:c0.c1023       *
   </para>
   <screen>&prompt.root;semanage login -a -s staff_u tux</screen>
 
+  </section>
+
+  <section xml:id="sec-semanage-module">
+    <title>The <command>semanage module</command> command</title>
+    <para>
+      The <command>semanage module</command> enables you to disable or enable a policy module and install or remove a custom policy module.
+    </para>
+    <para>
+      On top of common options mentioned in <xref linkend="list-common-options"/>, the command takes the following options:
+    </para>
+    <variablelist>
+      <varlistentry>
+        <term><option>-r</option>, <option>--remove</option></term>
+      <listitem>
+        <para>
+removes the specified policy module
+        </para>
+      </listitem>
+    </varlistentry>
+    <term><option>-d</option>, <option>--disable</option></term>
+    <listitem>
+      <para>
+        disables the provided policy module
+      </para>
+    </listitem>
+    <varlistentry>
+      <varlistentry>
+        <term><option>-e</option>, <option>--enable</option></term>
+        <listitem>
+          <para>
+            enables the provided policy module
+          </para>
+        </listitem>
+      </varlistentry>
+    </varlistentry>
+    </variablelist>
+    <para>
+To install a custom policy module, run the <command>semanage module</command> command as follows:
+    </para>
+    <screen>&prompt.root;semanage module -a <replaceable>POLICY_MODULE</replaceable></screen>
+    <para>
+      To remove a policy module, run the <command>semanage module</command> command as follows:
+    </para>
+    <screen>&prompt.root;semanage module -r <replaceable>POLICY_MODULE</replaceable></screen>
+    <para>
+      To enable a custom policy module, run:
+    </para>
+    <screen>&prompt.root;semanage module -e <replaceable>POLICY_MODULE</replaceable></screen>
+    <para>
+      To disable a custom policy module, run:
+    </para>
+    <screen>&prompt.root;semanage module -d <replaceable>POLICY_MODULE</replaceable></screen>
+    <para>
+      Bear in mind that you cannot disable default policy modules. To turn off particular default rules, you can use booleans, for details, refer to <xref linkend="sec-selinux-booleans"/>.
+    </para>
   </section>
 </section>
 
