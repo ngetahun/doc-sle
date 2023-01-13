@@ -967,6 +967,7 @@ removes the specified policy module
         </para>
       </listitem>
     </varlistentry>
+
     <varlistentry>
     <term><option>-d</option>, <option>--disable</option></term>
     <listitem>
@@ -974,6 +975,7 @@ removes the specified policy module
         disables the provided policy module
       </para>
     </listitem>
+    </varlistentry>
     <varlistentry>
     <term><option>-e</option>, <option>--enable</option></term>
         <listitem>
