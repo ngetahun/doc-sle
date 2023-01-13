@@ -960,13 +960,14 @@ root                 unconfined_u         s0-s0:c0.c1023       *
     </para>
     <variablelist>
       <varlistentry>
-        <term><option>-r</option>, <option>--remove</option></term>
+      <term><option>-r</option>, <option>--remove</option></term>
       <listitem>
         <para>
 removes the specified policy module
         </para>
       </listitem>
     </varlistentry>
+    <varlistentry>
     <term><option>-d</option>, <option>--disable</option></term>
     <listitem>
       <para>
@@ -974,15 +975,13 @@ removes the specified policy module
       </para>
     </listitem>
     <varlistentry>
-      <varlistentry>
-        <term><option>-e</option>, <option>--enable</option></term>
+    <term><option>-e</option>, <option>--enable</option></term>
         <listitem>
           <para>
             enables the provided policy module
           </para>
         </listitem>
       </varlistentry>
-    </varlistentry>
     </variablelist>
     <para>
 To install a custom policy module, run the <command>semanage module</command> command as follows:
