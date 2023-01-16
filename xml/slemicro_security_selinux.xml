@@ -628,7 +628,7 @@ Permissive
       <para>
         The script syntax is as follows:
       </para>
-<screen>&prompt.root;fixfiles <replaceable>OPTIONS</replaceable> <replaceable>ARGUMENT</replaceable></screen>
+<screen>&prompt.root;fixfiles [<replaceable>OPTIONS</replaceable>] <replaceable>ARGUMENT</replaceable></screen>
       <para>
         where:
       </para>
@@ -639,9 +639,27 @@ Permissive
           </para>
           <variablelist>
             <varlistentry>
-              <term><option></option></term>
+              <term><option>-l</option> <replaceable>LOGFILE</replaceable></term>
               <listitem>
-                <para></para>
+                <para>
+                  saves the output to the provided file
+                </para>
+              </listitem>
+            </varlistentry>
+            <varlistentry>
+              <term><option>-o</option> <replaceable>OUTPUT_FILE</replaceable></term>
+              <listitem>
+                <para>
+                  saves file names of all files wich file context differs from the default to the provided output file 
+                </para>
+              </listitem>
+            </varlistentry>
+            <varlistentry>
+              <term><option>-F</option></term>
+              <listitem>
+                <para>
+                  forces a reset of 
+                </para>
               </listitem>
             </varlistentry>
           </variablelist>
@@ -1109,6 +1127,74 @@ root                 unconfined_u         s0-s0:c0.c1023       *
     </section>
     <section xml:id="sec-restorecon-command">
       <title>The <command>restorecon</command> command</title>
+      <para>
+        The <command>restorecon</command> is used to set security context on files and directories. The generic syntax is as follows:
+      </para>
+      <screen>&prompt.root;restorecon [<replaceable>OPTIONS</replaceable>] [<replaceable>PATHNAME</replaceable>]</screen>
+      <para>
+        where: 
+      </para>
+      <itemizedlist>
+        <listitem>
+          <para>
+            <replaceable>PATHNAME</replaceable> is the path to the file or directory which context should be set.
+          </para>
+        </listitem>
+        <listitem>
+          <para>
+            <replaceable>OPTIONS</replaceable> can be the following:
+          </para>
+          <variablelist>
+            <varlistentry>
+              <term><option>-i</option></term>
+              <listitem>
+                <para>
+                  ignore non-existing files
+                </para>
+              </listitem>
+            </varlistentry>
+            <varlistentry>
+              <term><option>-f</option> <replaceable>FILENAME</replaceable></term>
+              <listitem>
+                <para>
+                  denotes an input file that contains a list of files to be processed by the command
+                </para>
+              </listitem>
+            </varlistentry>
+            <varlistentry>
+              <term><option>-F</option></term>
+              <listitem>
+                <para>
+                  forces reset of context of files that has a customizable type
+                </para>
+              </listitem>
+            </varlistentry>
+            <varlistentry>
+              <term><option>-e</option> <replaceable>DIRECTORY</replaceable></term>
+              <listitem>
+                <para>
+                  a directory that will be excluded when setting context
+                </para>
+              </listitem>
+            </varlistentry>
+            <varlistentry>
+              <term><option>-v</option></term>
+              <listitem>
+                <para>
+                  displays changes being performed to the file context
+                </para>
+              </listitem>
+            </varlistentry>
+          </variablelist>
+        </listitem>
+      </itemizedlist>
+      <para>
+        Bear in mind that the <command>restorecon</command> command does not change context of symbolic link targets.
+      </para>
+    </section>
+
+    <section xml:id="sec-semodule-commnad">
+      <title>The <command>semodule</command> command</title>
       <para>
         TBD
       </para>
