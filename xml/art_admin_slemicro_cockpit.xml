@@ -22,6 +22,7 @@
    <dm:translation>yes</dm:translation>
   </dm:docmanager>
  </info>
+ <!-- JH: this might be a concept and a glue topic. -->
  <section xml:id="sec-about-cockpit">
   <title>About Cockpit</title>
   <para>
@@ -34,6 +35,7 @@
   <para>
    Cockpit enables you to perform the following tasks:
   </para>
+  <!-- JH: add links there to particular topics. -->
   <itemizedlist>
    <listitem>
     <para>
@@ -88,6 +90,7 @@
   </itemizedlist>
  </section>
  <section xml:id="sec-admin-cockpit">
+  <!-- JH: this is a task based topic. Consider a different heading -->
   <title>Getting Cockpit</title>
   <para>
    Cockpit is included in the delivered pre-built images, or can be installed
@@ -142,6 +145,7 @@
  </section>
  <section xml:id="sec-cockpit-authentication">
   <title>Cockpit authentication</title>
+  <!-- JH: concept. Elaborate more: add the primary server definition. Add links to tasks regarding secondary servers (adding and logging in) -->
   <section xml:id="sec-authentication-login">
    <title>Authentication</title>
    <para>
@@ -159,6 +163,7 @@
      other primary servers or use another tool for cluster administration.
     </para>
    </note>
+   <!-- JH: probably skip this part as it will be included in tasks. -->
    <para>
     To log in to the primary server, enter your credentials on the Cockpit
     login page. To log in to secondary servers, there are two options. You can
@@ -167,6 +172,7 @@
     the login page.
    </para>
    <section xml:id="sec-adding-servers">
+    <!-- JH: Task. -->
     <title>Adding secondary servers</title>
     <para>
      To add a server as secondary, proceed as follows:
@@ -214,6 +220,7 @@
     </procedure>
    </section>
    <section xml:id="sec-secondary-direct">
+    <!-- JH: task. Describe the two ways how you can login to the secondary server. -->
     <title>Logging into secondary servers directly</title>
     <para>
      You can log in to any secondary server without logging in to the primary
@@ -232,6 +239,7 @@
   </section>
  </section>
  <section xml:id="sec-overview">
+  <!-- JH: cocncept. -->
   <title>System overview</title>
   <para>
    The <guimenu>Overview</guimenu> page provides information about the health
@@ -271,6 +279,7 @@
    tasks:
   </para>
   <itemizedlist>
+    <!-- JH: Rewrite those actions as tasks. -->
    <listitem>
     <para>
      change the host name by clicking <guimenu>edit</guimenu> and entering the
@@ -285,6 +294,7 @@
     </para>
    </listitem>
    <listitem>
+    <!-- this might be a separate task if there is a way how to change/add the SSH key. Otherwise, let's ditch this part. -->
     <para>
      view your SSH keys by clicking <guimenu>Show fingerprints</guimenu>
     </para>
@@ -292,6 +302,7 @@
   </itemizedlist>
  </section>
  <section xml:id="sec-cockpit-logs">
+  <!-- JH: reference of logs filtering. -->
   <title>&slema; logs</title>
   <para>
    After clicking <guimenu>Logs</guimenu>, Cockpit enables you to view logs on
@@ -554,6 +565,7 @@
  </section>
  <section xml:id="sec-cockpit-storage">
   <title>Managing storage</title>
+  <!-- JH: Split it to tasks. -->
   <para>
    The <guimenu>Storage</guimenu> page enables you to monitor traffic on your
    drives, repartition your system, view storage logs and create RAIDs or LVM.
@@ -730,6 +742,7 @@
     The <guimenu>Devices</guimenu> view enables you to add or manage RAIDs.
    </para>
    <section xml:id="sec-raid-creating">
+    <!-- JH: task. -->
     <title>Creating RAIDs</title>
     <para>
      You can create RAIDs of different levels on your system from the
@@ -767,6 +780,7 @@
        <para>
         Select one of the following RAID levels:
        </para>
+       <!-- JH: Maybe add a reference to a more detailed topic about RAID levels? -->
        <variablelist>
         <varlistentry>
          <term>RAID 0</term>
@@ -831,8 +845,8 @@
      <varlistentry>
       <term>Chunk size</term>
       <listitem>
-       <para>
-        The size of chunks. A chunk is the minimum amount of data read or
+        <para>
+        The size of chunks in KBs. A chunk is the minimum amount of data read or
         written to each data disk in the array during a single read/write
         operation.
        </para>
@@ -841,6 +855,7 @@
      <varlistentry>
       <term>Disks</term>
       <listitem>
+        <!-- JH: Add a reference to the concept describing RAID levels. -->
        <para>
         Select the disks that should be included in the RAID. The required
         number of disks depends on the selected RAID level.
@@ -854,6 +869,7 @@
     </para>
    </section>
    <section xml:id="sec-modifying-raids">
+    <!-- JH: task. -->
     <title>Modifying RAIDS</title>
     <para>
      Click the RAID in <guimenu>Devices</guimenu> to open the RAID details
@@ -894,6 +910,7 @@
   </section>
   <section xml:id="sec-volume-group">
    <title>Logical volume management</title>
+   <!-- JH: task. -->
    <para>
     Using Cockpit, you can create thinly provisioned logical volumes or
     logical block devices. To do so, create a volume group of disks by
@@ -1019,6 +1036,7 @@
    </mediaobject>
   </figure>
   <section xml:id="sec-networking-firewall">
+    <!-- JH: taks. But change the title. -->
    <title>Firewall</title>
    <important>
     <title>Firewall and Podman</title>
@@ -1084,6 +1102,7 @@
    </figure>
   </section>
   <section xml:id="sec-networking-interfaces">
+    <!-- JH: add a concept here. Describe what is a bond, bridge, etc. -->
    <title>Interfaces</title>
    <para>
     In the <guimenu>Interfaces</guimenu> part, you can add, modify or delete
@@ -1091,6 +1110,7 @@
    </para>
    <section xml:id="sec-networking-bridges">
     <title>Managing bonds</title>
+    <!-- JH: Task or reference? But move the bond definition to a context. -->
     <para>
      A bond interface is a combination of several network interfaces into one
      bond. Depending on the <guimenu>Mode</guimenu> (described further),
@@ -1382,6 +1402,7 @@
     </variablelist>
    </section>
    <section xml:id="sec-managing-bridge">
+    <!-- JH: taks or reference. Add a bridge description to a context. -->
     <title>Managing bridges</title>
     <para>
      A network bridge is a device that creates a single aggregated network from
@@ -1528,6 +1549,7 @@
     </variablelist>
    </section>
    <section xml:id="sec-managing-vlan">
+    <!-- JH: taks or a reference. But split each task adding, editing and from the concept link these topics. -->
     <title>Managing VLANs</title>
     <para>
      A virtual local area network is a logical subnetwork that groups devices
@@ -1594,6 +1616,7 @@
   </section>
  </section>
  <section xml:id="sec-cockpit-containers">
+  <!-- JH: this can be a set of tasks. -->
   <title>Working with containers</title>
   <para>
    After the first login to Cockpit, you need to start Podman. Keep the default
