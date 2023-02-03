@@ -1905,6 +1905,7 @@
   -->
  <section xml:id="sec-users-cockpit">
   <title>Users administration</title>
+  <!-- JH: rewrite to tasks. -->
   <note>
    <title>Users administration only for server administrators</title>
    <para>
